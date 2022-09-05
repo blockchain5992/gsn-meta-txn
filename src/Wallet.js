@@ -1,9 +1,12 @@
 import { React, useState, useEffect } from "react";
 import { ethers } from "ethers";
+// import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 import styles from "./Wallet.module.css";
 import simple_token_abi from "./Contracts/simple_token_abi.json";
 import Interactions from "./Interactions";
 import { RelayProvider } from "@opengsn/provider";
+import { Button } from "reactstrap";
 
 const Wallet = () => {
   // deploy simple token contract and paste deployed contract address here. This value is local ganache chain
@@ -20,6 +23,16 @@ const Wallet = () => {
   const [tokenName, setTokenName] = useState("Token");
   const [balance, setBalance] = useState(null);
   const [transferHash, setTransferHash] = useState(null);
+
+  // useEffect(() => {
+  //   if(window.ethereum) {
+  //     window.ethereum.on('chainChanged', () => {
+  //       window.location.reload();
+  //     })
+  //     window.ethereum.on('accountsChanged', () => {
+  //       window.location.reload();
+  //     })
+  // }})
 
   const connectWalletHandler = () => {
     if (window.ethereum && window.ethereum.isMetaMask) {
@@ -121,27 +134,33 @@ const Wallet = () => {
     setTokenName(await contract.name());
   };
 
+  //const notify = () => toast("Wow so easy!");
+
   return (
     <div>
-      <h2> {tokenName + " ERC-20 Wallet"} </h2>
-      <button className={styles.button6} onClick={connectWalletHandler}>
+      <h4> {tokenName + " ERC-20 Wallet"} </h4>
+      <Button color="primary" size="lg" onClick={connectWalletHandler}>
         {connButtonText}
-      </button>
+      </Button>
 
       <div className={styles.walletCard}>
         <div>
-          <h3>Address: {defaultAccount}</h3>
+          <h4>Address: {defaultAccount}</h4>
         </div>
 
         <div>
-          <h3>
+          <h4>
             {tokenName} Balance: {balance}
-          </h3>
+          </h4>
         </div>
 
         {errorMessage}
       </div>
       <Interactions contract={contract} />
+      {/* <div>
+        <button onClick={notify}>Notify!</button>
+        <ToastContainer />
+      </div> */}
     </div>
   );
 };
